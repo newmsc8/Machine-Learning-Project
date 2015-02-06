@@ -5,13 +5,16 @@ library(e1071)
 #read arguments
 args <- commandArgs(trailingOnly = TRUE)
 file.name <- args[1] #where the data is located
-model.type <- args[2] #model type (tree, ada, nb)
+model.type <- args[2] #model type (tree, svm, nb)
 response <- args[3] #which response variable are we modeling (CostLabel, RiskLabel, or RiskCost)
 
+message('file name: ',file.name,' -- model type: ',model.type,' -- response: ',response)
 #if the model is a tree, provide complexity parameter (usually 0.01, 0.001, or 0.0005)
 if(model.type == "tree") {
-	cp <- args[6]
+	cp <- args[4]
+	message('cp: ',cp)
 }
+
 
 df <- read.csv(file.name) #read in data
 k = 10 #number of folds for cross validation
@@ -19,6 +22,7 @@ ret = data.frame() #where we will hold results
 
 #remove VisitLink variable (this is only an ID)
 df$VisitLink<-NULL
+message('removed visit link')
 
 #if we're only modeling one response variable, remove the other
 if(response == "RiskLabel") {
@@ -33,13 +37,16 @@ if(response == "RiskLabel") {
 	df$RiskLabel<-NULL
 	formula = formula("RiskCost~.")
 }
+message('set response variable, remove others')
 
 #shuffle the data
 df.shuffle = df[1:nrow(df),]
+message('shuffle')
 
 for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 
 	cur<-vector()
+	message(i)
 
 	#separate train and test data
 	df.train = df.shuffle[which(1:nrow(df.shuffle)%%k != i%%k),]
@@ -50,11 +57,13 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 		tree = rpart(formula, df.train, control=rpart.control(cp=cp)),
 		svm = svm(formula=formula, data=df.train),
 		nb = naiveBayes(formula, data=df.train))
+	message('model made')
 	#use model to predict values for test data
 	p = switch(model.type,
 		tree = predict(model, newdata=df.test,type='class'),
 		svm = predict(model, newdata=df.test,type='class'),
 		nb = predict(model, newdata=df.test),type='class')
+	message('prediction done')
 
 	#results matrix has actual values in column 1 and predicted values in column 2
 	if(response == "RiskLabel") {
@@ -65,6 +74,7 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 		cur = cbind(df.test$RiskCost, p)
 	}
 	ret = rbind(ret, cur)
+	message('ret made')
 }
 
 #the total number of people predicted correctly by the model
