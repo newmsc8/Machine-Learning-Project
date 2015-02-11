@@ -3,6 +3,93 @@ library(rpart)
 library(e1071)
 library(caret)
 
+printMetrics<-function(ret) {
+	#the total number of people predicted correctly by the model
+	correct=ret[ret[,1]==ret[,2],]
+	#the accuracy = (total number predicted correctly)/(total number in file)
+	message('accuracy: ', nrow(correct)/nrow(ret))
+
+	numc = 3 #stores the number of classes (used in average)
+	if(response=='RiskCost') {
+		numc=9
+	}
+
+	#calculate the precision of each class
+	totalp = 0 #running precision total
+	for(i in 1:numc) {
+		#for LP create loop
+		predict = ret[ret[,2]==i,,drop=FALSE]
+		true = predict[predict[,1]==i,,drop=FALSE]
+		if(nrow(predict)!=0) {
+			message('precision ',i,': ',nrow(true)/nrow(predict))
+			totalp = totalp+(nrow(true)/nrow(predict))
+		} else {
+			message('precision ',i,': 0')
+		}
+	}
+	#report average precision
+	message('average precision: ',totalp/numc)
+
+	#calculate the recall of each class
+	totalr = 0 #running recall total
+	for(i in 1:numc) {
+		#for LP create loop
+		actual = ret[ret[,1]==i,,drop=FALSE]
+		true = actual[actual[,2]==i,,drop=FALSE]
+		if(nrow(actual)!=0) {
+			message('recall ',i,': ',nrow(true)/nrow(actual))
+			totalr = totalr+(nrow(true)/nrow(actual))
+		} else {
+			message('recall ',i,': 0')
+		}
+	}
+	#report average recall
+	message('average recall: ',totalr/numc)
+
+	#report F1 measure using average recall and precision
+	message('f-measure: ',(2*(totalp/numc)*(totalr/numc))/((totalp/numc)+(totalr/numc)))
+}
+
+printTotals<-function(ret,df.shuffle) {
+	#report counts so we can identify who 1,2,3(,4,5,6,7,8,9) are
+	message('figure out who is who: ')
+	if(response=='CostLabel') {
+		message('number low: ',nrow(df.shuffle[df.shuffle$CostLabel=='low',,drop=FALSE]))
+		message('number medium: ',nrow(df.shuffle[df.shuffle$CostLabel=='medium',,drop=FALSE]))
+		message('number high: ',nrow(df.shuffle[df.shuffle$CostLabel=='high',,drop=FALSE]))
+		message('number 1: ',nrow(ret[ret[,1]==1,,drop=FALSE]))
+		message('number 2: ',nrow(ret[ret[,1]==2,,drop=FALSE]))
+		message('number 3: ',nrow(ret[ret[,1]==3,,drop=FALSE]))
+	} else if(response=='RiskLabel') {
+		message('number 30days: ',nrow(df.shuffle[df.shuffle$RiskLabel=='30days',,drop=FALSE]))
+		message('number 60days: ',nrow(df.shuffle[df.shuffle$RiskLabel=='60days',,drop=FALSE]))
+		message('number 90days: ',nrow(df.shuffle[df.shuffle$RiskLabel=='90days',,drop=FALSE]))
+		message('number 1: ',nrow(ret[ret[,1]==1,,drop=FALSE]))
+		message('number 2: ',nrow(ret[ret[,1]==2,,drop=FALSE]))
+		message('number 3: ',nrow(ret[ret[,1]==3,,drop=FALSE]))
+	} else {
+		message('number low 30days: ',nrow(df.shuffle[df.shuffle$RiskCost=='low 30days',,drop=FALSE]))
+		message('number low 60days: ',nrow(df.shuffle[df.shuffle$RiskCost=='low 60days',,drop=FALSE]))
+		message('number low 90days: ',nrow(df.shuffle[df.shuffle$RiskCost=='low 90days',,drop=FALSE]))
+		message('number medium 30days: ',nrow(df.shuffle[df.shuffle$RiskCost=='medium 30days',,drop=FALSE]))
+		message('number medium 60days: ',nrow(df.shuffle[df.shuffle$RiskCost=='medium 60days',,drop=FALSE]))
+		message('number medium 90days: ',nrow(df.shuffle[df.shuffle$RiskCost=='medium 90days',,drop=FALSE]))
+		message('number high 30days: ',nrow(df.shuffle[df.shuffle$RiskCost=='high 30days',,drop=FALSE]))
+		message('number high 60days: ',nrow(df.shuffle[df.shuffle$RiskCost=='high 60days',,drop=FALSE]))
+		message('number high 90days: ',nrow(df.shuffle[df.shuffle$RiskCost=='high 90days',,drop=FALSE]))
+		message('number 1: ',nrow(ret[ret[,1]==1,,drop=FALSE]))
+		message('number 2: ',nrow(ret[ret[,1]==2,,drop=FALSE]))
+		message('number 3: ',nrow(ret[ret[,1]==3,,drop=FALSE]))
+		message('number 4: ',nrow(ret[ret[,1]==4,,drop=FALSE]))
+		message('number 5: ',nrow(ret[ret[,1]==5,,drop=FALSE]))
+		message('number 6: ',nrow(ret[ret[,1]==6,,drop=FALSE]))
+		message('number 7: ',nrow(ret[ret[,1]==7,,drop=FALSE]))
+		message('number 8: ',nrow(ret[ret[,1]==8,,drop=FALSE]))
+		message('number 9: ',nrow(ret[ret[,1]==9,,drop=FALSE]))
+	}
+}
+	
+
 #read arguments
 args <- commandArgs(trailingOnly = TRUE)
 file.name <- args[1] #where the data is located
@@ -100,156 +187,23 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 #aggregate truths and preds
 ret=cbind(truths,preds)
 message('ret made')
-#the total number of people predicted correctly by the model
-correct=ret[ret[,1]==ret[,2],]
-#the accuracy = (total number predicted correctly)/(total number in file)
-message('accuracy: ', nrow(correct)/nrow(df.shuffle))
 
-#calculate the precision of each class
-totalp = 0 #running precision total
-numc = 3 #stores the number of classes (used in average)
-if((response=='RiskLabel')||(response=='CostLabel')) {
-	predict = ret[ret[,2]==1,,drop=FALSE]
-	true = predict[predict[,1]==1,,drop=FALSE]
-	#precision of class 1
-	if(nrow(predict)!=0) {
-		message('precision 1: ',nrow(true)/nrow(predict))
-		totalp = totalp+(nrow(true)/nrow(predict))
-	} else {
-		message('precision 1: 0')
-	}
-	predict = ret[ret[,2]==2,,drop=FALSE]
-	true = predict[predict[,1]==2,,drop=FALSE]
-	#precision of class 2
-	if(nrow(predict)!=0) {
-		message('precision 2: ',nrow(true)/nrow(predict))
-		totalp = totalp+(nrow(true)/nrow(predict))
-	} else {
-		message('precision 2: 0')
-	}
-	predict = ret[ret[,2]==3,,drop=FALSE]
-	true = predict[predict[,1]==3,,drop=FALSE]
-	#precision of class 3
-	if(nrow(predict)!=0) {
-		message('precision 3: ',nrow(true)/nrow(predict))
-		totalp = totalp+(nrow(true)/nrow(predict))
-	} else {
-		message('precision 3: 0')
-	}
-} else {
-	for(i in 1:9) {
-		#for LP create loop
-		predict = ret[ret[,2]==i,,drop=FALSE]
-		true = predict[predict[,1]==i,,drop=FALSE]
-		if(nrow(predict)!=0) {
-			message('precision ',i,': ',nrow(true)/nrow(predict))
-			totalp = totalp+(nrow(true)/nrow(predict))
-		} else {
-			message('precision ',i,': 0')
-		}
-	}
-	numc=9
-}
-#report average precision
-message('average precision: ',totalp/numc)
-
-#running recall total
-totalr = 0
-if((response=='RiskLabel')||(response=='CostLabel')) {
-	actual = ret[ret[,1]==1,,drop=FALSE]
-	true = actual[actual[,2]==1,,drop=FALSE]
-	#recall of class 1
-	if(nrow(actual)!=0) {
-		message('recall 1: ',nrow(true)/nrow(actual))
-		totalr = totalr+(nrow(true)/nrow(actual))
-	} else {
-		message('recall 1: 0')
-	}
-	actual = ret[ret[,1]==2,,drop=FALSE]
-	true = actual[actual[,2]==2,,drop=FALSE]
-	#recall of class 2
-	if(nrow(actual)!=0) {
-		message('recall 2: ',nrow(true)/nrow(actual))
-		totalr = totalr+(nrow(true)/nrow(actual))
-	} else {
-		message('recall 2: 0')
-	}
-	actual = ret[ret[,1]==3,,drop=FALSE]
-	true = actual[actual[,2]==3,,drop=FALSE]
-	#recall of class 3
-	if(nrow(actual)!=0) {
-		message('recall 3: ',nrow(true)/nrow(actual))
-		totalr = totalr+(nrow(true)/nrow(actual))
-	} else {
-		message('recall 3: 0')
-	}
-} else {
-	for(i in 1:9) {
-		#for LP create loop
-		actual = ret[ret[,1]==i,,drop=FALSE]
-		true = actual[actual[,2]==i,,drop=FALSE]
-		if(nrow(actual)!=0) {
-			message('recall ',i,': ',nrow(true)/nrow(actual))
-			totalr = totalr+(nrow(true)/nrow(actual))
-		} else {
-			message('recall ',i,': 0')
-		}
-	}
-}
-#report average recall
-message('average recall: ',totalr/numc)
-
-#report F1 measure using average recall and precision
-message('f-measure: ',(2*(totalp/numc)*(totalr/numc))/((totalp/numc)+(totalr/numc)))
-
-#report counts so we can identify who 1,2,3(,4,5,6,7,8,9) are
-message('figure out who is who: ')
-if(response=='CostLabel') {
-	message('number low: ',nrow(df.shuffle[df.shuffle$CostLabel=='low',,drop=FALSE]))
-	message('number medium: ',nrow(df.shuffle[df.shuffle$CostLabel=='medium',,drop=FALSE]))
-	message('number high: ',nrow(df.shuffle[df.shuffle$CostLabel=='high',,drop=FALSE]))
-	message('number 1: ',nrow(ret[ret[,1]==1,,drop=FALSE]))
-	message('number 2: ',nrow(ret[ret[,1]==2,,drop=FALSE]))
-	message('number 3: ',nrow(ret[ret[,1]==3,,drop=FALSE]))
-} else if(response=='RiskLabel') {
-	message('number 30days: ',nrow(df.shuffle[df.shuffle$RiskLabel=='30days',,drop=FALSE]))
-	message('number 60days: ',nrow(df.shuffle[df.shuffle$RiskLabel=='60days',,drop=FALSE]))
-	message('number 90days: ',nrow(df.shuffle[df.shuffle$RiskLabel=='90days',,drop=FALSE]))
-	message('number 1: ',nrow(ret[ret[,1]==1,,drop=FALSE]))
-	message('number 2: ',nrow(ret[ret[,1]==2,,drop=FALSE]))
-	message('number 3: ',nrow(ret[ret[,1]==3,,drop=FALSE]))
-} else {
-	message('number low 30days: ',nrow(df.shuffle[df.shuffle$RiskCost=='low 30days',,drop=FALSE]))
-	message('number low 60days: ',nrow(df.shuffle[df.shuffle$RiskCost=='low 60days',,drop=FALSE]))
-	message('number low 90days: ',nrow(df.shuffle[df.shuffle$RiskCost=='low 90days',,drop=FALSE]))
-	message('number medium 30days: ',nrow(df.shuffle[df.shuffle$RiskCost=='medium 30days',,drop=FALSE]))
-	message('number medium 60days: ',nrow(df.shuffle[df.shuffle$RiskCost=='medium 60days',,drop=FALSE]))
-	message('number medium 90days: ',nrow(df.shuffle[df.shuffle$RiskCost=='medium 90days',,drop=FALSE]))
-	message('number high 30days: ',nrow(df.shuffle[df.shuffle$RiskCost=='high 30days',,drop=FALSE]))
-	message('number high 60days: ',nrow(df.shuffle[df.shuffle$RiskCost=='high 60days',,drop=FALSE]))
-	message('number high 90days: ',nrow(df.shuffle[df.shuffle$RiskCost=='high 90days',,drop=FALSE]))
-	message('number 1: ',nrow(ret[ret[,1]==1,,drop=FALSE]))
-	message('number 2: ',nrow(ret[ret[,1]==2,,drop=FALSE]))
-	message('number 3: ',nrow(ret[ret[,1]==3,,drop=FALSE]))
-	message('number 4: ',nrow(ret[ret[,1]==4,,drop=FALSE]))
-	message('number 5: ',nrow(ret[ret[,1]==5,,drop=FALSE]))
-	message('number 6: ',nrow(ret[ret[,1]==6,,drop=FALSE]))
-	message('number 7: ',nrow(ret[ret[,1]==7,,drop=FALSE]))
-	message('number 8: ',nrow(ret[ret[,1]==8,,drop=FALSE]))
-	message('number 9: ',nrow(ret[ret[,1]==9,,drop=FALSE]))
-}
+#print metrics
+printMetrics(ret)
+#print totals to ID who is who
+printTotals(ret,df.shuffle)
 
 #print confusion matrix
 message('confusion matrix')
 confusionMatrix(preds,truths)
 
+#save predictions/truths for future reference if needed
 preds.file<-paste(model.type,response,'preds.rds',sep=" ")
 truths.file<-paste(model.type,response,'truths.rds',sep=" ")
 if(model.type=='tree') {
 	preds.file<-paste(cp,preds.file,sep=" ")
 	truths.file<-paste(cp,truths.file,sep=" ")
 }
-
 saveRDS(preds,file=preds.file)
 saveRDS(truths,file=truths.file)	
 
