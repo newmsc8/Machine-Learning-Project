@@ -1,0 +1,85 @@
+Loading required package: lattice
+Loading required package: ggplot2
+Loading required package: methods
+file name: ../chf_readmit_cost.csv -- model type: tree -- response: RiskLabel
+cp: 0.001
+set response variable, remove others
+sample
+shuffle
+1
+model made
+prediction done
+2
+model made
+prediction done
+3
+model made
+prediction done
+4
+model made
+prediction done
+5
+model made
+prediction done
+6
+model made
+prediction done
+7
+model made
+prediction done
+8
+model made
+prediction done
+9
+model made
+prediction done
+10
+model made
+prediction done
+accuracy: 0.64161220043573
+precision 1: 0.67338003502627
+precision 2: 0.209401709401709
+precision 3: 0
+average precision: 0.294260581475993
+recall 1: 0.931744749596123
+recall 2: 0.0600490196078431
+recall 3: 0
+average recall: 0.330597923067989
+f-measure: 0.311372691159058
+figure out who is who: 
+number 30days: 2476
+number 60days: 816
+number 90days: 380
+number 1: 2476
+number 2: 816
+number 3: 380
+confusion matrix
+Confusion Matrix and Statistics
+
+          Reference
+Prediction 30days 60days 90days
+    30days   2307    764    355
+    60days    160     49     25
+    90days      9      3      0
+
+Overall Statistics
+                                          
+               Accuracy : 0.6416          
+                 95% CI : (0.6259, 0.6571)
+    No Information Rate : 0.6743          
+    P-Value [Acc > NIR] : 1               
+                                          
+                  Kappa : -0.0056         
+ Mcnemar's Test P-Value : <2e-16          
+
+Statistics by Class:
+
+                     Class: 30days Class: 60days Class: 90days
+Sensitivity                0.93174       0.06005      0.000000
+Specificity                0.06438       0.93522      0.996355
+Pos Pred Value             0.67338       0.20940      0.000000
+Neg Pred Value             0.31301       0.77691      0.896175
+Prevalence                 0.67429       0.22222      0.103486
+Detection Rate             0.62827       0.01334      0.000000
+Detection Prevalence       0.93301       0.06373      0.003268
+Balanced Accuracy          0.49806       0.49764      0.498177

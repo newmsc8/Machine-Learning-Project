@@ -1,0 +1,84 @@
+Loading required package: lattice
+Loading required package: ggplot2
+Loading required package: methods
+file name: ../chf_readmit_cost.csv -- model type: svm -- response: RiskLabel
+set response variable, remove others
+sample
+shuffle
+1
+model made
+prediction done
+2
+model made
+prediction done
+3
+model made
+prediction done
+4
+model made
+prediction done
+5
+model made
+prediction done
+6
+model made
+prediction done
+7
+model made
+prediction done
+8
+model made
+prediction done
+9
+model made
+prediction done
+10
+model made
+prediction done
+accuracy: 0.674019607843137
+precision 1: 0.674203214383002
+precision 2: 0
+precision 3: 0
+average precision: 0.224734404794334
+recall 1: 0.999596122778675
+recall 2: 0
+recall 3: 0
+average recall: 0.333198707592892
+f-measure: 0.268423621278673
+figure out who is who: 
+number 30days: 2476
+number 60days: 816
+number 90days: 380
+number 1: 2476
+number 2: 816
+number 3: 380
+confusion matrix
+Confusion Matrix and Statistics
+
+          Reference
+Prediction 30days 60days 90days
+    30days   2475    816    380
+    60days      1      0      0
+    90days      0      0      0
+
+Overall Statistics
+                                          
+               Accuracy : 0.674           
+                 95% CI : (0.6586, 0.6892)
+    No Information Rate : 0.6743          
+    P-Value [Acc > NIR] : 0.5219          
+                                          
+                  Kappa : -5e-04          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: 30days Class: 60days Class: 90days
+Sensitivity                 0.9996     0.0000000        0.0000
+Specificity                 0.0000     0.9996499        1.0000
+Pos Pred Value              0.6742     0.0000000           NaN
+Neg Pred Value              0.0000     0.7777172        0.8965
+Prevalence                  0.6743     0.2222222        0.1035
+Detection Rate              0.6740     0.0000000        0.0000
+Detection Prevalence        0.9997     0.0002723        0.0000
+Balanced Accuracy           0.4998     0.4998249        0.5000

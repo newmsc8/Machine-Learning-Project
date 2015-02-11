@@ -1,0 +1,95 @@
+Loading required package: lattice
+Loading required package: ggplot2
+Loading required package: methods
+file name: ../chf_readmit_cost.csv -- model type: tree -- response: RiskLabel
+cp: 0.01
+set response variable, remove others
+shuffle
+1
+model made
+prediction done
+stored in preds and truths
+2
+model made
+prediction done
+stored in preds and truths
+3
+model made
+prediction done
+stored in preds and truths
+4
+model made
+prediction done
+stored in preds and truths
+5
+model made
+prediction done
+stored in preds and truths
+6
+model made
+prediction done
+stored in preds and truths
+7
+model made
+prediction done
+stored in preds and truths
+8
+model made
+prediction done
+stored in preds and truths
+9
+model made
+prediction done
+stored in preds and truths
+10
+model made
+prediction done
+stored in preds and truths
+ret made
+accuracy: 0.674291938997821
+precision 1: 0.674291938997821
+precision 2: 0
+precision 3: 0
+average precision: 0.22476397966594
+recall 1: 1
+recall 2: 0
+recall 3: 0
+average recall: 0.333333333333333
+f-measure: 0.268488397310779
+figure out who is who: 
+number 30days: 2476
+number 60days: 816
+number 90days: 380
+number 1: 2476
+number 2: 816
+number 3: 380
+confusion matrix
+Confusion Matrix and Statistics
+
+          Reference
+Prediction 30days 60days 90days
+    30days   2476    816    380
+    60days      0      0      0
+    90days      0      0      0
+
+Overall Statistics
+                                          
+               Accuracy : 0.6743          
+                 95% CI : (0.6589, 0.6894)
+    No Information Rate : 0.6743          
+    P-Value [Acc > NIR] : 0.5078          
+                                          
+                  Kappa : 0               
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: 30days Class: 60days Class: 90days
+Sensitivity                 1.0000        0.0000        0.0000
+Specificity                 0.0000        1.0000        1.0000
+Pos Pred Value              0.6743           NaN           NaN
+Neg Pred Value                 NaN        0.7778        0.8965
+Prevalence                  0.6743        0.2222        0.1035
+Detection Rate              0.6743        0.0000        0.0000
+Detection Prevalence        1.0000        0.0000        0.0000
+Balanced Accuracy           0.5000        0.5000        0.5000
