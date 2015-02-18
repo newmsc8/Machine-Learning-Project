@@ -112,7 +112,7 @@ truths<-c() #where we will hold ground truth
 ret = data.frame() #where we will hold preds and truths
 
 #get columns for round 1
-df<-df[,c("DXCCS1", "DRG", "PRCCS1", "AGE", "RACE", "FEMALE", "NCHRONIC", "LOS", "TOTCHG", "CostLabel", "RiskLabel","RiskCost")]
+#df<-df[,c("DXCCS1", "DRG", "PRCCS1", "AGE", "RACE", "FEMALE", "NCHRONIC", "LOS", "TOTCHG", "CostLabel", "RiskLabel","RiskCost")]
 
 #if we're only modeling one response variable, remove the other
 if(response == "RiskLabel") {

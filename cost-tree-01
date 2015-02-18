@@ -1,0 +1,8 @@
+Loading required package: lattice
+Loading required package: ggplot2
+Loading required package: methods
+file name: ../new_chf_readmit_cost.csv -- model type: tree -- response: CostLabel
+cp: 0.01
+set response variable, remove others
+shuffle
+1
