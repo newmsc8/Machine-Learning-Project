@@ -10,7 +10,7 @@ printMetrics<-function(ret) {
 	message('accuracy: ', nrow(correct)/nrow(ret))
 
 	numc = 3 #stores the number of classes (used in average)
-	if(response=='RiskCost') {
+	if(response=='ReadmitAndCostBucket') {
 		numc=9
 	}
 
@@ -53,30 +53,30 @@ printMetrics<-function(ret) {
 printTotals<-function(ret,df.shuffle) {
 	#report counts so we can identify who 1,2,3(,4,5,6,7,8,9) are
 	message('figure out who is who: ')
-	if(response=='CostLabel') {
-		message('number low: ',nrow(df.shuffle[df.shuffle$CostLabel=='low',,drop=FALSE]))
-		message('number medium: ',nrow(df.shuffle[df.shuffle$CostLabel=='medium',,drop=FALSE]))
-		message('number high: ',nrow(df.shuffle[df.shuffle$CostLabel=='high',,drop=FALSE]))
+	if(response=='CostBucket') {
+		message('number low: ',nrow(df.shuffle[df.shuffle$CostBucket=='low',,drop=FALSE]))
+		message('number medium: ',nrow(df.shuffle[df.shuffle$CostBucket=='medium',,drop=FALSE]))
+		message('number high: ',nrow(df.shuffle[df.shuffle$CostBucket=='high',,drop=FALSE]))
 		message('number 1: ',nrow(ret[ret[,1]==1,,drop=FALSE]))
 		message('number 2: ',nrow(ret[ret[,1]==2,,drop=FALSE]))
 		message('number 3: ',nrow(ret[ret[,1]==3,,drop=FALSE]))
-	} else if(response=='RiskLabel') {
-		message('number 30days: ',nrow(df.shuffle[df.shuffle$RiskLabel=='30days',,drop=FALSE]))
-		message('number 60days: ',nrow(df.shuffle[df.shuffle$RiskLabel=='60days',,drop=FALSE]))
-		message('number 90days: ',nrow(df.shuffle[df.shuffle$RiskLabel=='90days',,drop=FALSE]))
+	} else if(response=='ReadmitBucket') {
+		message('number 30days: ',nrow(df.shuffle[df.shuffle$ReadmitBucket=='30days',,drop=FALSE]))
+		message('number 60days: ',nrow(df.shuffle[df.shuffle$ReadmitBucket=='60days',,drop=FALSE]))
+		message('number 90days: ',nrow(df.shuffle[df.shuffle$ReadmitBucket=='90days',,drop=FALSE]))
 		message('number 1: ',nrow(ret[ret[,1]==1,,drop=FALSE]))
 		message('number 2: ',nrow(ret[ret[,1]==2,,drop=FALSE]))
 		message('number 3: ',nrow(ret[ret[,1]==3,,drop=FALSE]))
 	} else {
-		message('number low 30days: ',nrow(df.shuffle[df.shuffle$RiskCost=='low 30days',,drop=FALSE]))
-		message('number low 60days: ',nrow(df.shuffle[df.shuffle$RiskCost=='low 60days',,drop=FALSE]))
-		message('number low 90days: ',nrow(df.shuffle[df.shuffle$RiskCost=='low 90days',,drop=FALSE]))
-		message('number medium 30days: ',nrow(df.shuffle[df.shuffle$RiskCost=='medium 30days',,drop=FALSE]))
-		message('number medium 60days: ',nrow(df.shuffle[df.shuffle$RiskCost=='medium 60days',,drop=FALSE]))
-		message('number medium 90days: ',nrow(df.shuffle[df.shuffle$RiskCost=='medium 90days',,drop=FALSE]))
-		message('number high 30days: ',nrow(df.shuffle[df.shuffle$RiskCost=='high 30days',,drop=FALSE]))
-		message('number high 60days: ',nrow(df.shuffle[df.shuffle$RiskCost=='high 60days',,drop=FALSE]))
-		message('number high 90days: ',nrow(df.shuffle[df.shuffle$RiskCost=='high 90days',,drop=FALSE]))
+		message('number low 30days: ',nrow(df.shuffle[df.shuffle$ReadmitAndCostBucket=='low 30days',,drop=FALSE]))
+		message('number low 60days: ',nrow(df.shuffle[df.shuffle$ReadmitAndCostBucket=='low 60days',,drop=FALSE]))
+		message('number low 90days: ',nrow(df.shuffle[df.shuffle$ReadmitAndCostBucket=='low 90days',,drop=FALSE]))
+		message('number medium 30days: ',nrow(df.shuffle[df.shuffle$ReadmitAndCostBucket=='medium 30days',,drop=FALSE]))
+		message('number medium 60days: ',nrow(df.shuffle[df.shuffle$ReadmitAndCostBucket=='medium 60days',,drop=FALSE]))
+		message('number medium 90days: ',nrow(df.shuffle[df.shuffle$ReadmitAndCostBucket=='medium 90days',,drop=FALSE]))
+		message('number high 30days: ',nrow(df.shuffle[df.shuffle$ReadmitAndCostBucket=='high 30days',,drop=FALSE]))
+		message('number high 60days: ',nrow(df.shuffle[df.shuffle$ReadmitAndCostBucket=='high 60days',,drop=FALSE]))
+		message('number high 90days: ',nrow(df.shuffle[df.shuffle$ReadmitAndCostBucket=='high 90days',,drop=FALSE]))
 		message('number 1: ',nrow(ret[ret[,1]==1,,drop=FALSE]))
 		message('number 2: ',nrow(ret[ret[,1]==2,,drop=FALSE]))
 		message('number 3: ',nrow(ret[ret[,1]==3,,drop=FALSE]))
@@ -94,7 +94,7 @@ printTotals<-function(ret,df.shuffle) {
 args <- commandArgs(trailingOnly = TRUE)
 file.name <- args[1] #where the data is located
 model.type <- args[2] #model type (tree, svm, nb)
-response <- args[3] #which response variable are we modeling (CostLabel, RiskLabel, or RiskCost)
+response <- args[3] #which response variable are we modeling (CostBucket, ReadmitBucket, or ReadmitAndCostBucket)
 sample.size<-as.numeric(args[4])
 
 message('file name: ',file.name,' -- model type: ',model.type,' -- response: ',response)
@@ -106,27 +106,33 @@ if(model.type == "tree") {
 
 
 df <- read.csv(file.name) #read in data
+df$X<-NULL
+df$X.1<-NULL
+df$ReadmitAndCostBucket <- paste(df$ReadmitBucket,df$CostBucket,sep=" ")
+df$ReadmitBucket<-as.factor(df$ReadmitBucket)
+df$ReadmitAndCostBucket<-as.factor(df$ReadmitAndCostBucket)
+df$CostBucket<-as.factor(df$CostBucket)
 k = 10 #number of folds for cross validation
 preds<-c() #where we will hold predictions
 truths<-c() #where we will hold ground truth
 ret = data.frame() #where we will hold preds and truths
 
 #get columns for round 1
-#df<-df[,c("DXCCS1", "DRG", "PRCCS1", "AGE", "RACE", "FEMALE", "NCHRONIC", "LOS", "TOTCHG", "CostLabel", "RiskLabel","RiskCost")]
+#df<-df[,c("DXCCS1", "DRG", "PRCCS1", "AGE", "RACE", "FEMALE", "NCHRONIC", "LOS", "TOTCHG", "CostBucket", "ReadmitBucket","ReadmitAndCostBucket")]
 
 #if we're only modeling one response variable, remove the other
-if(response == "RiskLabel") {
-	df$CostLabel<-NULL
-	df$RiskCost<-NULL
-	formula = formula("RiskLabel~.")
-} else if(response == "CostLabel") {
-	df$RiskLabel<-NULL
-	df$RiskCost<-NULL
-	formula = formula("CostLabel~.")
+if(response == "ReadmitBucket") {
+	df$CostBucket<-NULL
+	df$ReadmitAndCostBucket<-NULL
+	formula = formula("ReadmitBucket~.")
+} else if(response == "CostBucket") {
+	df$ReadmitBucket<-NULL
+	df$ReadmitAndCostBucket<-NULL
+	formula = formula("CostBucket~.")
 } else {
-	df$CostLabel<-NULL
-	df$RiskLabel<-NULL
-	formula = formula("RiskCost~.")
+	df$CostBucket<-NULL
+	df$ReadmitBucket<-NULL
+	formula = formula("ReadmitAndCostBucket~.")
 }
 message('set response variable, remove others')
 
@@ -156,30 +162,31 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 		nb = naiveBayes(formula, data=df.train))
 	message('model made')
 	#use model to predict values for test data
+	print(colnames(df.test))
 	p = switch(model.type,
 		tree = predict(model, newdata=df.test,type='class'),
 		svm = predict(model, newdata=df.test,type='class'),
-		nb = predict(model, newdata=df.test,type='class'))
+		nb = predict(model, newdata=data.frame(df.test),type='class'))
 	message('prediction done')
 
 	#store predictions in preds and associated ground truths in truths and ensure proper factor levels/labels
-	if(response == "RiskLabel") {
+	if(response == "ReadmitBucket") {
 		preds<-c(preds,p)
-		preds<-factor(preds, levels=1:nlevels(df$RiskLabel), labels=levels(df$RiskLabel))
-		truths<-c(truths,df.test$RiskLabel)
-	  	truths<-factor(truths, levels=1:nlevels(df$RiskLabel), labels=levels(df$RiskLabel))
+		preds<-factor(preds, levels=1:nlevels(df$ReadmitBucket), labels=levels(df$ReadmitBucket))
+		truths<-c(truths,df.test$ReadmitBucket)
+	  	truths<-factor(truths, levels=1:nlevels(df$ReadmitBucket), labels=levels(df$ReadmitBucket))
 		message('stored in preds and truths')
-	} else if(response == "CostLabel") {
+	} else if(response == "CostBucket") {
 		preds<-c(preds,p)
-		preds<-factor(preds, levels=1:nlevels(df$CostLabel), labels=levels(df$CostLabel))
-		truths<-c(truths,df.test$CostLabel)
-	  	truths<-factor(truths, levels=1:nlevels(df$CostLabel), labels=levels(df$CostLabel))
+		preds<-factor(preds, levels=1:nlevels(df$CostBucket), labels=levels(df$CostBucket))
+		truths<-c(truths,df.test$CostBucket)
+	  	truths<-factor(truths, levels=1:nlevels(df$CostBucket), labels=levels(df$CostBucket))
 		message('stored in preds and truths')
 	} else {
 		preds<-c(preds,p)
-		preds<-factor(preds, levels=1:nlevels(df$RiskCost), labels=levels(df$RiskCost))
-		truths<-c(truths,df.test$RiskCost)
-  		truths<-factor(truths, levels=1:nlevels(df$RiskCost), labels=levels(df$RiskCost))
+		preds<-factor(preds, levels=1:nlevels(df$ReadmitAndCostBucket), labels=levels(df$ReadmitAndCostBucket))
+		truths<-c(truths,df.test$ReadmitAndCostBucket)
+  		truths<-factor(truths, levels=1:nlevels(df$ReadmitAndCostBucket), labels=levels(df$ReadmitAndCostBucket))
 		message('stored in preds and truths')
 	}
 }
