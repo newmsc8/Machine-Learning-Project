@@ -1,0 +1,181 @@
+Loading required package: lattice
+Loading required package: ggplot2
+Loading required package: methods
+randomForest 4.6-10
+Type rfNews() to see new features/changes/bug fixes.
+file name: ../TCSS555 - NEW CHF Readmission.csv -- appraoch: CC -- model type: tree -- sample size: 0
+cp: 0.0005
+remove unnecessary buckets
+ncol: 22
+shuffle
+1
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+2
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+3
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+4
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+5
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+6
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+7
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+8
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+9
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+10
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+scoring averageAccuray
+average accuracy: 0.369555555555545
+scoring averagePrecision
+precision High High: 0.117460317460317
+precision High Medium: 0.104868913857678
+precision High Low: 0.0666666666666667
+precision Medium High: 0.092896174863388
+precision Medium Medium: 0.0454545454545455
+precision Medium Low: 0.0571428571428571
+precision Low High: 0.293982808022923
+precision Low Medium: 0.16991341991342
+precision Low Low: 0.204172876304024
+average precision: 0.128062064409535
+scoring averageRecall
+recall 1: 0.0925
+recall 2: 0.0756756756756757
+recall 3: 0.0431654676258993
+recall 4: 0.0561056105610561
+recall 5: 0.0179856115107914
+recall 6: 0.0263157894736842
+recall 7: 0.432911392405063
+recall 8: 0.198986058301648
+recall 9: 0.204783258594918
+average recall: 0.127603207127637
+scoring f1Measure
+f1measure: 0.127832223999706
+confusion matrix
+Confusion Matrix and Statistics
+
+               Reference
+Prediction      High High High Low High Medium Low High Low Low Low Medium
+  High High            29       13          28       97      44         71
+  High Low             24       12          17       73      33         41
+  High Medium          26       10          22      110      50         57
+  Low High            131       79          96      489     214        298
+  Low Low              44       40          49      208      97        142
+  Low Medium           73       40          72      269     129        151
+  Medium High          28       11          14       78      34         38
+  Medium Low           12        9           7       48      18         35
+  Medium Medium        18       10          19       57      29         36
+               Reference
+Prediction      Medium High Medium Low Medium Medium
+  High High              18         18            12
+  High Low               11         11            12
+  High Medium            17          6            15
+  Low High               76         63            55
+  Low Low                42         35            35
+  Low Medium             48         25            37
+  Medium High            16         13            13
+  Medium Low              5          9             5
+  Medium Medium           8          5            11
+
+Overall Statistics
+                                          
+               Accuracy : 0.1858          
+                 95% CI : (0.1745, 0.1975)
+    No Information Rate : 0.3176          
+    P-Value [Acc > NIR] : 1.0000          
+                                          
+                  Kappa : 0.0018          
+ Mcnemar's Test P-Value : 0.3611          
+
+Statistics by Class:
+
+                     Class: High High Class: High Low Class: High Medium
+Sensitivity                  0.075325        0.053571           0.067901
+Specificity                  0.926853        0.948082           0.930316
+Pos Pred Value               0.087879        0.051282           0.070288
+Neg Pred Value               0.914628        0.950305           0.927872
+Prevalence                   0.085556        0.049778           0.072000
+Detection Rate               0.006444        0.002667           0.004889
+Detection Prevalence         0.073333        0.052000           0.069556
+Balanced Accuracy            0.501089        0.500827           0.499109
+                     Class: Low High Class: Low Low Class: Low Medium
+Sensitivity                   0.3422        0.14969           0.17376
+Specificity                   0.6705        0.84553           0.80914
+Pos Pred Value                0.3258        0.14017           0.17891
+Neg Pred Value                0.6866        0.85530           0.80361
+Prevalence                    0.3176        0.14400           0.19311
+Detection Rate                0.1087        0.02156           0.03356
+Detection Prevalence          0.3336        0.15378           0.18756
+Balanced Accuracy             0.5063        0.49761           0.49145
+                     Class: Medium High Class: Medium Low Class: Medium Medium
+Sensitivity                    0.066390           0.04865             0.056410
+Specificity                    0.946232           0.96779             0.957724
+Pos Pred Value                 0.065306           0.06081             0.056995
+Neg Pred Value                 0.947121           0.95956             0.957279
+Prevalence                     0.053556           0.04111             0.043333
+Detection Rate                 0.003556           0.00200             0.002444
+Detection Prevalence           0.054444           0.03289             0.042889
+Balanced Accuracy              0.506311           0.50822             0.507067

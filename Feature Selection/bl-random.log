@@ -1,0 +1,120 @@
+Loading required package: lattice
+Loading required package: ggplot2
+Loading required package: methods
+randomForest 4.6-10
+Type rfNews() to see new features/changes/bug fixes.
+file name: ../TCSS555 - NEW CHF Readmission.csv -- appraoch: BL -- model type: random -- sample size: 0
+remove unnecessary buckets
+ncol: 21
+shuffle
+1
+stored in preds and truths
+2
+stored in preds and truths
+3
+stored in preds and truths
+4
+stored in preds and truths
+5
+stored in preds and truths
+6
+stored in preds and truths
+7
+stored in preds and truths
+8
+stored in preds and truths
+9
+stored in preds and truths
+10
+stored in preds and truths
+scoring averageAccuray
+average accuracy: 0.262000000000001
+scoring averagePrecision
+precision High High: 0.102941176470588
+precision High Medium: 0.0818713450292398
+precision High Low: 0.0655105973025048
+precision Medium High: 0.0808678500986193
+precision Medium Medium: 0.0592734225621415
+precision Medium Low: 0.0557851239669422
+precision Low High: 0.277310924369748
+precision Low Medium: 0.176855895196507
+precision Low Low: 0.148897058823529
+average precision: 0.116590377091091
+scoring averageRecall
+recall 1: 0.1225
+recall 2: 0.113513513513514
+recall 3: 0.122302158273381
+recall 4: 0.135313531353135
+recall 5: 0.111510791366906
+recall 6: 0.118421052631579
+recall 7: 0.111392405063291
+recall 8: 0.102661596958175
+recall 9: 0.121076233183857
+average recall: 0.117632364704871
+scoring f1Measure
+f1measure: 0.117109053150825
+confusion matrix
+Confusion Matrix and Statistics
+
+               Reference
+Prediction      High High High Low High Medium Low High Low Low Low Medium
+  High High            39       33          57       67      55         64
+  High Low             40       35          38       66      54         51
+  High Medium          33       48          40       80      66         48
+  Low High            100       70          62      185     100        145
+  Low Low              50       60          53      111      92         96
+  Low Medium           74       52          69      109      86         75
+  Medium High          39       43          32       67      54         48
+  Medium Low           30       30          34       53      38         43
+  Medium Medium        39       30          53       55      53         50
+               Reference
+Prediction      Medium High Medium Low Medium Medium
+  High High              38         46            33
+  High Low               34         39            39
+  High Medium            53         38            39
+  Low High               62         76            68
+  Low Low                54         43            56
+  Low Medium             55         48            59
+  Medium High            41         39            38
+  Medium Low             37         30            34
+  Medium Medium          35         24            48
+
+Overall Statistics
+                                          
+               Accuracy : 0.13            
+                 95% CI : (0.1203, 0.1402)
+    No Information Rate : 0.1762          
+    P-Value [Acc > NIR] : 1.00000         
+                                          
+                  Kappa : 0.0108          
+ Mcnemar's Test P-Value : 0.02664         
+
+Statistics by Class:
+
+                     Class: High High Class: High Low Class: High Medium
+Sensitivity                  0.087838        0.087282           0.091324
+Specificity                  0.903107        0.911930           0.900295
+Pos Pred Value               0.090278        0.088384           0.089888
+Neg Pred Value               0.900442        0.910819           0.901850
+Prevalence                   0.098667        0.089111           0.097333
+Detection Rate               0.008667        0.007778           0.008889
+Detection Prevalence         0.096000        0.088000           0.098889
+Balanced Accuracy            0.495472        0.499606           0.495810
+                     Class: Low High Class: Low Low Class: Low Medium
+Sensitivity                  0.23329        0.15385           0.12097
+Specificity                  0.81575        0.86597           0.85773
+Pos Pred Value               0.21313        0.14959           0.11962
+Neg Pred Value               0.83260        0.86976           0.85928
+Prevalence                   0.17622        0.13289           0.13778
+Detection Rate               0.04111        0.02044           0.01667
+Detection Prevalence         0.19289        0.13667           0.13933
+Balanced Accuracy            0.52452        0.50991           0.48935
+                     Class: Medium High Class: Medium Low Class: Medium Medium
+Sensitivity                    0.100244          0.078329              0.11594
+Specificity                    0.912002          0.927374              0.91703
+Pos Pred Value                 0.102244          0.091185              0.12403
+Neg Pred Value                 0.910222          0.915368              0.91101
+Prevalence                     0.090889          0.085111              0.09200
+Detection Rate                 0.009111          0.006667              0.01067
+Detection Prevalence           0.089111          0.073111              0.08600
+Balanced Accuracy              0.506123          0.502852              0.51649

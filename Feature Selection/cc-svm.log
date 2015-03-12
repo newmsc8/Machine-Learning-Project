@@ -1,0 +1,180 @@
+Loading required package: lattice
+Loading required package: ggplot2
+Loading required package: methods
+randomForest 4.6-10
+Type rfNews() to see new features/changes/bug fixes.
+file name: ../TCSS555 - NEW CHF Readmission.csv -- appraoch: CC -- model type: svm -- sample size: 0
+remove unnecessary buckets
+ncol: 22
+shuffle
+1
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+2
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+3
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+4
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+5
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+6
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+7
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+8
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+9
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+10
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+scoring averageAccuray
+average accuracy: 0.427259259259245
+scoring averagePrecision
+precision High High: 0
+precision High Medium: 0
+precision High Low: 0
+precision Medium High: 0
+precision Medium Medium: 0
+precision Medium Low: 0
+precision Low High: 0.272880539499037
+precision Low Medium: 0.159203980099502
+precision Low Low: 0.19047619047619
+average precision: 0.0691734122305255
+scoring averageRecall
+recall 1: 0
+recall 2: 0
+recall 3: 0
+recall 4: 0
+recall 5: 0
+recall 6: 0
+recall 7: 0.956118143459916
+recall 8: 0.0405576679340938
+recall 9: 0.0418535127055306
+average recall: 0.115392147122171
+scoring f1Measure
+f1measure: 0.086495753476888
+confusion matrix
+Confusion Matrix and Statistics
+
+               Reference
+Prediction      High High High Low High Medium Low High Low Low Low Medium
+  High High            13        8          22       49      25         37
+  High Low             15        6          13       39      18         23
+  High Medium          10        8          14       52      34         27
+  Low High             66       40          44     2073     171        183
+  Low Low              24       25          31      122      57         68
+  Low Medium           42       25          41      212      64         62
+  Medium High          15       10          12       39      19         26
+  Medium Low           11        8           5       29      11         24
+  Medium Medium        17        8          13       37      21         21
+               Reference
+Prediction      Medium High Medium Low Medium Medium
+  High High              13         12             8
+  High Low                9          8             9
+  High Medium            14          5            11
+  Low High               36         35            37
+  Low Low                28         18            23
+  Low Medium             25         20            28
+  Medium High            13         11             9
+  Medium Low              5          8             5
+  Medium Medium           6          5            10
+
+Overall Statistics
+                                         
+               Accuracy : 0.5013         
+                 95% CI : (0.4866, 0.516)
+    No Information Rate : 0.5893         
+    P-Value [Acc > NIR] : 1.0000         
+                                         
+                  Kappa : 0.1967         
+ Mcnemar's Test P-Value : 0.3648         
+
+Statistics by Class:
+
+                     Class: High High Class: High Low Class: High Medium
+Sensitivity                  0.061033        0.043478           0.071795
+Specificity                  0.959412        0.969280           0.962602
+Pos Pred Value               0.069519        0.042857           0.080000
+Neg Pred Value               0.953629        0.969725           0.958150
+Prevalence                   0.047333        0.030667           0.043333
+Detection Rate               0.002889        0.001333           0.003111
+Detection Prevalence         0.041556        0.031111           0.038889
+Balanced Accuracy            0.510223        0.506379           0.517198
+                     Class: Low High Class: Low Low Class: Low Medium
+Sensitivity                   0.7817        0.13571           0.13163
+Specificity                   0.6688        0.91691           0.88657
+Pos Pred Value                0.7721        0.14394           0.11946
+Neg Pred Value                0.6810        0.91155           0.89726
+Prevalence                    0.5893        0.09333           0.10467
+Detection Rate                0.4607        0.01267           0.01378
+Detection Prevalence          0.5967        0.08800           0.11533
+Balanced Accuracy             0.7253        0.52631           0.50910
+                     Class: Medium High Class: Medium Low Class: Medium Medium
+Sensitivity                    0.087248          0.065574             0.071429
+Specificity                    0.967594          0.977615             0.970642
+Pos Pred Value                 0.084416          0.075472             0.072464
+Neg Pred Value                 0.968707          0.974056             0.970197
+Prevalence                     0.033111          0.027111             0.031111
+Detection Rate                 0.002889          0.001778             0.002222
+Detection Prevalence           0.034222          0.023556             0.030667
+Balanced Accuracy              0.527421          0.521595             0.521035

@@ -1,0 +1,178 @@
+Loading required package: lattice
+Loading required package: ggplot2
+Loading required package: methods
+file name: chf_readmit_cost.csv -- appraoch: CC -- model type: tree -- sample size: 0
+cp: 0.001
+remove unnecessary buckets
+shuffle
+1
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+2
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+3
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+4
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+5
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+6
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+7
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+8
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+9
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+10
+in CC
+model made 1
+model made 2
+[1] "making predictions"
+prediction done 1
+prediction done 2
+stored in preds and truths
+scoring averageAccuray
+average accuracy: 0.448347857661572
+scoring averagePrecision
+precision High High: 0
+precision High Medium: 0
+precision High Low: 0.111111111111111
+precision Medium High: 0.0795454545454545
+precision Medium Medium: 0.0447761194029851
+precision Medium Low: 0.0967741935483871
+precision Low High: 0.305126118795769
+precision Low Medium: 0.241080038572806
+precision Low Low: 0.323348017621145
+average precision: 0.133529005955295
+scoring averageRecall
+recall 1: 0
+recall 2: 0
+recall 3: 0.0078125
+recall 4: 0.0268199233716475
+recall 5: 0.0109489051094891
+recall 6: 0.0320284697508897
+recall 7: 0.446428571428571
+recall 8: 0.302663438256659
+recall 9: 0.453086419753086
+average recall: 0.142198691963371
+scoring f1Measure
+f1measure: 0.137727548805149
+confusion matrix
+Confusion Matrix and Statistics
+
+               Reference
+Prediction      High High High Low High Medium Low High Low Low Low Medium
+  High High             7        0           2       33       1          9
+  High Low              0        4           1        0      32         10
+  High Medium           3        2           2        5       4         34
+  Low High             34        4           8      458     195        220
+  Low Low               0       39           7      160     422        212
+  Low Medium            9       11          31      218     198        329
+  Medium High          10        0           2       90      10         27
+  Medium Low            0       10           3       10      97         22
+  Medium Medium         2        4          14       27      26         58
+               Reference
+Prediction      Medium High Medium Low Medium Medium
+  High High               8          0             4
+  High Low                0         14             2
+  High Medium             1          6            10
+  Low High              103         13            33
+  Low Low                17         85            18
+  Low Medium             31         34            81
+  Medium High            21          1             2
+  Medium Low              0         32             7
+  Medium Medium           5          8            20
+
+Overall Statistics
+                                          
+               Accuracy : 0.3527          
+                 95% CI : (0.3372, 0.3684)
+    No Information Rate : 0.2726          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.1682          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: High High Class: High Low Class: High Medium
+Sensitivity                  0.107692        0.054054          0.0285714
+Specificity                  0.984197        0.983602          0.9819545
+Pos Pred Value               0.109375        0.063492          0.0298507
+Neg Pred Value               0.983925        0.980604          0.9811373
+Prevalence                   0.017702        0.020153          0.0190632
+Detection Rate               0.001906        0.001089          0.0005447
+Detection Prevalence         0.017429        0.017157          0.0182462
+Balanced Accuracy            0.545945        0.518828          0.5052629
+                     Class: Low High Class: Low Low Class: Low Medium
+Sensitivity                   0.4575         0.4284            0.3572
+Specificity                   0.7716         0.7998            0.7772
+Pos Pred Value                0.4288         0.4396            0.3493
+Neg Pred Value                0.7915         0.7924            0.7832
+Prevalence                    0.2726         0.2682            0.2508
+Detection Rate                0.1247         0.1149            0.0896
+Detection Prevalence          0.2908         0.2614            0.2565
+Balanced Accuracy             0.6146         0.6141            0.5672
+                     Class: Medium High Class: Medium Low Class: Medium Medium
+Sensitivity                    0.112903          0.165803             0.112994
+Specificity                    0.959266          0.957172             0.958798
+Pos Pred Value                 0.128834          0.176796             0.121951
+Neg Pred Value                 0.952978          0.953881             0.955245
+Prevalence                     0.050654          0.052560             0.048203
+Detection Rate                 0.005719          0.008715             0.005447
+Detection Prevalence           0.044390          0.049292             0.044662
+Balanced Accuracy              0.536084          0.561487             0.535896
