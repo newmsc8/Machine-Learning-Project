@@ -2,7 +2,6 @@
 library(rpart)
 library(e1071)
 library(caret)
-library(randomForest)
 
 #function to calculate average accuracy (takes vector of predictions, and vector of true responses)
 averageAccuracy<-function(x.preds,x.truth) {
@@ -128,9 +127,6 @@ message('file name: ',file.name,' -- appraoch: ',approach,' -- model type: ',mod
 if(model.type == "tree") {
 	cp <- args[5]
 	message('cp: ',cp)
-} else if(model.type == 'forest') {
-	ntrees <- args[5]
-	message('ntrees: ',ntrees)
 }
 
 
@@ -195,10 +191,6 @@ if(model.type == 'nb') {
 	df.shuffle[, -which(sapply(df.shuffle, is.numeric))]<-as.data.frame(lapply((df.shuffle[,-which(sapply(df.shuffle, is.numeric))]), as.factor))
 }
 
-#start time
-if(model.type=='forest') {
-	message('start date & time for ',ntrees,' : ',Sys.time())
-}
 for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 
 	#cur<-vector()
@@ -216,14 +208,12 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 		model = switch(model.type,
 			tree = rpart(formula=formula, data=df.train, control=rpart.control(cp=cp)),
 			svm = svm(formula=formula, data=df.train),
-			forest = randomForest(formula, df.train, ntrees=ntrees),
 			nb = naiveBayes(formula=formula, data=df.train))
 		message('model made')
 		#use model to predict readmit and cost
 		p = switch(model.type,
 			tree = predict(model, newdata=df.test,type='class'),
 			svm = predict(model, newdata=df.test,type='class'),
-			forest = predict(model, df),
 			nb = predict(model, newdata=df.test[,-which(names(df.shuffle) %in% c('ReadmitAndCostBucket'))]))
 		message('prediction done')
 	} else if(approach == 'CC') {
@@ -232,14 +222,12 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 		c.model = switch(model.type,
 			tree = rpart(formula=formula('CostBucket~.'), data=df.train, control=rpart.control(cp=cp)),
 			svm = svm(formula=formula('CostBucket~.'), data=df.train),
-			forest = randomForest(formula('CostBucket~.'), df.train, ntrees=ntrees),
 			nb = naiveBayes(formula=formula('CostBucket~.'), data=df.train))
 		message('model made 1')
 		#train a model that classifies risk but does NOT use cost bucket as a predictor
 		r.model = switch(model.type,
 			tree = rpart(formula=formula('ReadmitBucket~.'), data=df.train[,-which(names(df.shuffle) %in% c('CostBucket'))], control=rpart.control(cp=cp)),
 			svm = svm(formula=formula('ReadmitBucket~.'), data=df.train[,-which(names(df.shuffle) %in% c('CostBucket'))]),
-			forest = randomForest(formula('ReadmitBucket~.'),df.train[,which(names(df.shuffle) %in% c('CostBucket'))],ntrees=ntrees),
 			nb = naiveBayes(formula=formula('ReadmitBucket~.'), data=df.train[,-which(names(df.shuffle) %in% c('CostBucket'))]))
 		message('model made 2')
  
@@ -249,7 +237,6 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
   		r.p = switch(model.type,
 			tree = predict(r.model, newdata=df.test,type='class'),
 			svm = predict(r.model, newdata=df.test,type='class'),
-			forest = predict(r.model,df.test),
 			nb = predict(r.model, newdata=df.test,type='class'))
 		message('prediction done 1')
 
@@ -259,7 +246,6 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 		c.p = switch(model.type,
 			tree = predict(c.model, newdata=c.df.test,type='class'),
 			svm = predict(c.model, newdata=c.df.test,type='class'),
-			forest = predict(c.model,c.df.test),
 			nb = predict(c.model, newdata=c.df.test,type='class'))
 		message('prediction done 2')
 		
@@ -271,14 +257,12 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 		c.model = switch(model.type,
 			tree = rpart(formula=formula('CostBucket~.'), data=df.train[,-which(names(df.shuffle) %in% c('ReadmitBucket'))], control=rpart.control(cp=cp)),
 			svm = svm(formula=formula('CostBucket~.'), data=df.train[,-which(names(df.shuffle) %in% c('ReadmitBucket'))]),
-			forest = randomForest(formula('CostBucket~.'),df.train[,-which(names(df.shuffle) %in% c('ReadmitBucket'))],ntrees=ntrees),
 			nb = naiveBayes(formula=formula('CostBucket~.'), data=df.train[,-which(names(df.shuffle) %in% c('ReadmitBucket'))]))
 		message('model made 1')
 		#build a model to predict risk WITHOUT using cost bucket as a predictor
 		r.model = switch(model.type,
 			tree = rpart(formula=formula('ReadmitBucket~.'), data=df.train[,-which(names(df.shuffle) %in% c('CostBucket'))], control=rpart.control(cp=cp)),
 			svm = svm(formula=formula('ReadmitBucket~.'), data=df.train[,-which(names(df.shuffle) %in% c('CostBucket'))]),
-			forest = randomForest(formula('ReadmitBucket~.'),df.train[,-which(names(df.shuffle) %in% c('CostBucket'))],ntrees=ntrees),
 			nb = naiveBayes(formula=formula('ReadmitBucket~.'), data=df.train[,-which(names(df.shuffle) %in% c('CostBucket'))]))
 		message('model made 2')
  
@@ -288,7 +272,6 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
   		r.p = switch(model.type,
 			tree = predict(r.model, newdata=df.test,type='class'),
 			svm = predict(r.model, newdata=df.test,type='class'),
-			forest = predict(r.model,df.test),
 			nb = predict(r.model, newdata=df.test,type='class'))
 		message('prediction done 1')
 
@@ -296,7 +279,6 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 		c.p = switch(model.type,
 			tree = predict(c.model, newdata=df.test,type='class'),
 			svm = predict(c.model, newdata=df.test,type='class'),
-			forest = predict(c.model,df.test),
 			nb = predict(c.model, newdata=df.test,type='class'))
 		message('prediction done 2')
 		
@@ -321,11 +303,6 @@ for(i in 1:k) { #10 fold cross validation, modify k for fewer folds
 
 	message('stored in preds and truths')
 }
-#completion time
-if(model.type=='forest') {
-	message('complete time for ',ntrees,' : ',Sys.time())
-}
-
 #report average accuracy
 message('average accuracy: ',averageAccuracy(preds,truths))
 #report average precision
@@ -345,8 +322,8 @@ message('confusion matrix')
 confusionMatrix(both[1:length(preds)],both[(length(preds)+1):length(both)])
 
 #save predictions/truths for future reference if needed
-preds.file<-paste(approach,model.type,'preds TEST.rds',sep=" ")
-truths.file<-paste(approach,model.type,'truths TEST.rds',sep=" ")
+preds.file<-paste(approach,model.type,'preds.rds',sep=" ")
+truths.file<-paste(approach,model.type,'truths.rds',sep=" ")
 if(model.type=='tree') {
 	preds.file<-paste(cp,preds.file,sep=" ")
 	truths.file<-paste(cp,truths.file,sep=" ")
