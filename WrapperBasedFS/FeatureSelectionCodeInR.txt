@@ -1,0 +1,89 @@
+library(FSelector)
+  library(mlbench)
+  
+  cost<- read.csv("newData.csv")	#reading data for performing feature selection for cost
+  
+  #removing 1st 2 unnecessary columns
+  cost$X.1=NULL
+  cost$X=NULL
+  
+  risk<-cost		#reading data for performing feature selection for risk
+  
+  riskCost<-cost	#reading data for performing feature selection for risk and cost both.  
+  riskCost$ReadmitAndCostBucket <- paste(riskCost$ReadmitBucket,riskCost$CostBucket,sep=" ") #create LP label
+  
+  # getting rid of other response variables
+  cost$ReadmitBucket=NULL
+  risk$CostBucket=NULL;
+  riskCost$ReadmitBucket=NULL;
+  riskCost$CostBucket=NULL;
+  
+  cf=formula("CostBucket~.")
+  rf=formula("ReadmitBucket~.")
+  rcf=formula("ReadmitAndCostBucket~.")
+  
+  #Cost Feature Selection
+  
+  #Information gain
+  subset=information.gain(cf,cost)
+  ig=cutoff.k(subset,20)
+  costpr=c(as.simple.formula(ig,"InformationGain"))
+  
+  #Gain ratio
+  subset=gain.ratio(cf,cost)
+  gr=cutoff.k(subset,20)
+  costpr=c(costpr,as.simple.formula(gr,"GainRatio"))
+  
+  #Symmetrical uncertainty
+  subset=symmetrical.uncertainty(cf,cost)
+  su=cutoff.k(subset,20)
+  costpr=c(costpr,as.simple.formula(su,"SymmetricalUncertainty"))
+    
+  # Readmit Risk Feature Selection
+  
+  #Information gain
+  subset=information.gain(rf,risk)
+  ig=cutoff.k(subset,20)
+  riskpr=c(as.simple.formula(ig,"InformationGain"))
+  
+  #Gain ratio
+  subset=gain.ratio(rf,risk)
+  gr=cutoff.k(subset,20)
+  riskpr=c(riskpr,as.simple.formula(gr,"GainRatio"))
+  
+  #Symmetrical uncertainty
+  subset=symmetrical.uncertainty(rf,risk)
+  su=cutoff.k(subset,20)
+  riskpr=c(riskpr,as.simple.formula(su,"SymmetricalUncertainty"))
+   
+  # Readmit Risk + Cost Feature Selection
+  
+  #Information gain
+  subset=information.gain(rcf,riskCost)
+  ig=cutoff.k(subset,20)
+  riskCostpr=c(as.simple.formula(ig,"InformationGain"))
+  
+  #Gain ratio
+  subset=gain.ratio(rcf,riskCost)
+  gr=cutoff.k(subset,20)
+  riskCostpr=c(riskCostpr,as.simple.formula(gr,"GainRatio"))
+  
+  #Symmetrical uncertainty
+  subset=symmetrical.uncertainty(rcf,riskCost)
+  su=cutoff.k(subset,20)
+  riskCostpr=c(riskCostpr,as.simple.formula(su,"SymmetricalUncertainty"))
+  
+  
+  #Results
+  message("Cost Feature Selection")
+  print(costpr)  
+   
+  message("Readmit Risk Feature Selection")
+  print(riskpr)
+    
+  message("Readmit Risk + Cost Feature Selection")
+  print(riskCostpr)
+  
+ 
+ 
+ 
